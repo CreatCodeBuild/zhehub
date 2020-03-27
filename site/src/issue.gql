@@ -1,0 +1,25 @@
+query { 
+  viewer { 
+    login
+    repository(name:"zhehub") {
+      name
+      issues(first: 10) {
+        nodes {
+          id,
+          title
+          body
+          comments(first: 10) {
+            nodes {
+              author {
+                ... on User {
+                  name
+                }
+              }
+              body
+            }
+          }
+        }
+      }
+    }
+  }
+}
