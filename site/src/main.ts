@@ -1,11 +1,13 @@
 import { promises } from 'fs';
 import { default as fetch } from "node-fetch";
+import { join } from 'path';
+import { IssueQueryResult, IssuesNode, CommentsNode } from './issue';
+import { mapIssuesNodeToIssue } from './model';
+import { display } from './render';
 
 
-
-
-async function main() {
-    const queryIssue = await promises.readFile("./issue.gql");
+async function loadData(): Promise<IssueQueryResult> {
+    const queryIssue = await promises.readFile(join(__dirname, "./issue.gql"));
     const httpBody = {
         query: String(queryIssue)
     };
@@ -22,9 +24,18 @@ async function main() {
             "body": JSON.stringify(httpBody),
             "method": "POST"
         });
-    const json = await ret.text();
-    console.log(json);
+    return ret.json();
 }
-main();
 
+interface Runner {
+    (result: IssueQueryResult)
+}
 
+interface Dependencies {
+    runner: Runner
+}
+
+export async function main(dep: Dependencies) {
+    const result = await loadData()
+    dep.runner(result);
+}
