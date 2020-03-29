@@ -3,6 +3,7 @@
   "main": "src/main.js",
   "dependencies": {
     "express": "^4.17.1",
+    "graphql": "^14.6.0",
     "marked": "^0.8.2",
     "node-fetch": "^2.6.0"
   },

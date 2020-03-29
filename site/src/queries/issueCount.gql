@@ -1,8 +1,0 @@
-query GetIssueCount {
-  repository(name: "zhehub", owner: "CreatCodeBuild") {
-    name
-    issues(first: 10) {
-      totalCount
-    }
-  }
-}

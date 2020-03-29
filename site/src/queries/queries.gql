@@ -1,0 +1,50 @@
+query GetIssues($pageSize: Int!) {
+  repository(name: "zhehub", owner: "CreatCodeBuild") {
+    name
+    issues(first: $pageSize) {
+      totalCount
+      nodes {
+        title
+        author {
+          ... on User {
+            name
+            url
+            avatarUrl
+          }
+        }
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+    }
+  }
+}
+
+query GetIssuesOfViewer { 
+  viewer { 
+    login
+    repository(name:"zhehub") {
+      name
+      issues(first: 10) {
+        nodes {
+          id
+          title
+          body
+          comments(first: 10) {
+            nodes {
+              author {
+                ... on User {
+                  name
+                }
+              }
+              body
+            }
+          }
+        }
+      }
+    }
+  }
+}
