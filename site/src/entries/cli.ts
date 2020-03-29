@@ -1,8 +1,12 @@
-import { main } from '../main';
+import { Main } from '../main';
 import { display } from '../render';
 
-main({
-    runner: (result) => {
-        display(result, console.log);
-    }
-});
+const main = new Main();
+
+(async function() {
+    const data = await main.getIssueCount();
+    await main.displayIssueCount(data, async (arg) => {
+        console.log(`Discussion Count: ${arg}`);
+    })
+}())
+
