@@ -7,7 +7,7 @@ import { display } from './render';
 
 
 async function loadData(): Promise<IssueQueryResult> {
-    const queryIssue = await promises.readFile(join(__dirname, "./issue.gql"));
+    const queryIssue = await promises.readFile(join(__dirname, "./queries/issue.gql"));
     const httpBody = {
         query: String(queryIssue)
     };
@@ -17,7 +17,7 @@ async function loadData(): Promise<IssueQueryResult> {
         // https://developer.github.com/v4/guides/forming-calls/#the-graphql-endpoint
         "https://api.github.com/graphql",
         {
-            "credentials": "include",
+            // "credentials": "include",
             "headers": {
                 "Authorization": `bearer ${token}`
             },
@@ -27,8 +27,12 @@ async function loadData(): Promise<IssueQueryResult> {
     return ret.json();
 }
 
+interface IssueLoader {
+    (): Promise<IssueQueryResult>
+}
+
 interface Runner {
-    (result: IssueQueryResult)
+    (IssueLoader)
 }
 
 interface Dependencies {
@@ -36,6 +40,5 @@ interface Dependencies {
 }
 
 export async function main(dep: Dependencies) {
-    const result = await loadData()
-    dep.runner(result);
+    dep.runner(loadData);
 }

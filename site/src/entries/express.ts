@@ -5,9 +5,10 @@ import { RequestHandler, Application, default as express } from 'express';
 export const app = express()
 
 main({
-    runner: (result) => {
+    runner: (loadData) => {
         const port = 3000
-        app.get('/', function (req, res) {
+        app.get('/', async function (req, res) {
+            const result = await loadData()
             res.set({
                 'content-type': 'text/html; charset=utf-8'
             })

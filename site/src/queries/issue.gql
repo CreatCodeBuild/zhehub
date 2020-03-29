@@ -1,11 +1,11 @@
-query { 
+query GetIssuesOfViewer { 
   viewer { 
     login
     repository(name:"zhehub") {
       name
       issues(first: 10) {
         nodes {
-          id,
+          id
           title
           body
           comments(first: 10) {

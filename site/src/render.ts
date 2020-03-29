@@ -1,15 +1,17 @@
 import { Issue, mapIssuesNodeToIssue } from "./model"
 import { IssueQueryResult} from "./issue";
+import marked from 'marked';
 
 function* rendor(issue: Issue): Iterable<string> {
     yield `
                 <div>${issue.title}</div>
-                <div>${issue.body}</div>
+                <div>${marked(issue.body)}</div>
             `;
+    yield ``
     for (let comment of issue.comments) {
         yield `
-                <div>${comment.author.name}</div>
-                <div>${comment.body}</div>
+                <div><a>${comment.author.name}</a></div>
+                <div>${marked(comment.body)}</div>
                 `;
     }
 }

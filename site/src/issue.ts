@@ -18,6 +18,7 @@ export interface Repository {
 
 export interface Issues {
     nodes: IssuesNode[];
+    totalCount: number;
 }
 
 export interface IssuesNode {
@@ -39,3 +40,19 @@ export interface CommentsNode {
 export interface Author {
     name: null | string;
 }
+
+export interface Pokedex {
+    data: Data;
+}
+
+export interface Data {
+    repository: Repository;
+}
+
+export interface Repository {
+    name:   string;
+    issues: Issues;
+}
+
+
+
