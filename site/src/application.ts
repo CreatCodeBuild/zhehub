@@ -5,6 +5,7 @@ import { display } from './render';
 import { GetIssues } from './queries/types/GetIssues'
 import { ExecutionResult } from 'graphql'
 import { JP } from './pages/jp';
+import { Algorithm } from './pages/algorithm';
 
 
 async function loadData<T>(document: string, variables?: any): Promise<T> {
@@ -28,10 +29,10 @@ async function loadData<T>(document: string, variables?: any): Promise<T> {
         throw new Error(await ret.text());
     }
     const result: ExecutionResult<T> = await ret.json();
-    if(result.errors) {
+    if (result.errors) {
         throw new Error(JSON.stringify(result));
     }
-    if(!result.data) {
+    if (!result.data) {
         throw new Error(`result.data is ${result.data}`);
     }
     return result.data;
@@ -42,7 +43,7 @@ type Displayer<T> = (data: T) => Promise<void>
 export class Application {
     constructor(
 
-    ) {}
+    ) { }
 
     async getGetIssues(): Promise<GetIssues> {
         const query = await promises.readFile(join(__dirname, "./queries/queries.gql"));
@@ -50,13 +51,17 @@ export class Application {
     }
 
     async displayIssues(data: GetIssues, displayer: Displayer<number>) {
-        if(data.repository == null) {
+        if (data.repository == null) {
             return;
         }
         await displayer(data.repository.issues.totalCount)
     }
 
-    async *serveJP() {
-        yield *JP();
+    async *pageJP() {
+        yield* JP();
+    }
+
+    async *pageAlgorithm() {
+        yield* Algorithm();
     }
 }

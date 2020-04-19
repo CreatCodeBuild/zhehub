@@ -17,12 +17,19 @@ import { RequestHandler, default as express } from 'express';
     //     res.json(result);
     // });
     app.get('/jp', async function (req, res) {
-        // todo
         res.set({
             'content-type': 'text/html; charset=utf-8'
         });
-        for await (let element of main.serveJP()) {
-            console.log(element);
+        for await (let element of main.pageJP()) {
+            res.write(element);
+        }
+        res.end();
+    });
+    app.get('/algo', async function (req, res) {
+        res.set({
+            'content-type': 'text/html; charset=utf-8'
+        });
+        for await (let element of main.pageAlgorithm()) {
             res.write(element);
         }
         res.end();
