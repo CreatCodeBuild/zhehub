@@ -2,8 +2,9 @@ import { promises } from 'fs';
 import { default as fetch } from "node-fetch";
 import { join } from 'path';
 import { display } from './render';
-import { GetIssueCount } from './queries/types/GetIssueCount'
+import { GetIssues } from './queries/types/GetIssues'
 import { ExecutionResult } from 'graphql'
+import { JP } from './pages/jp';
 
 
 async function loadData<T>(document: string, variables?: any): Promise<T> {
@@ -18,7 +19,8 @@ async function loadData<T>(document: string, variables?: any): Promise<T> {
             },
             "body": JSON.stringify({
                 query: document,
-                variables: variables
+                variables: variables,
+                operationName: "GetIssues"
             }),
             "method": "POST"
         });
@@ -37,20 +39,24 @@ async function loadData<T>(document: string, variables?: any): Promise<T> {
 
 type Displayer<T> = (data: T) => Promise<void>
 
-export class Main {
+export class Application {
     constructor(
 
     ) {}
 
-    async getIssueCount(): Promise<GetIssueCount> {
-        const query = await promises.readFile(join(__dirname, "./queries/issueCount.gql"));
-        return await loadData<GetIssueCount>(String(query));
+    async getGetIssues(): Promise<GetIssues> {
+        const query = await promises.readFile(join(__dirname, "./queries/queries.gql"));
+        return await loadData<GetIssues>(String(query));
     }
 
-    async displayIssueCount(data: GetIssueCount, displayer: Displayer<number>) {
+    async displayIssues(data: GetIssues, displayer: Displayer<number>) {
         if(data.repository == null) {
             return;
         }
         await displayer(data.repository.issues.totalCount)
+    }
+
+    async *serveJP() {
+        yield *JP();
     }
 }
