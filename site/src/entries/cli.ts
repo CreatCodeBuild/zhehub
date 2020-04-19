@@ -1,7 +1,7 @@
-import { Main } from '../main';
+import { Application } from '../application';
 import { display } from '../render';
 
-const main = new Main();
+const main = new Application();
 
 (async function() {
     const data = await main.getIssueCount();
